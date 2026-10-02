@@ -1,0 +1,24 @@
+Modelo Lampada
+inicio_modelo
+  dado estadoDaLampada;
+  
+  operacao acende()
+  inicio_operacao
+    estadoDaLampada = "aceso";
+  fim_operacao
+  
+  operacao apaga()
+  inicio_operacao
+    estadoDaLampada = "apagado";
+  fim_operacao
+  
+  operacao mostrarEstado()
+  inicio_operacao
+     se(estadoDaLampada == "aceso")
+        imprimir "a lâmpada está acesa";
+     senao
+        imprimir "a lâmpada está apagada";   
+  fim_operacao
+fim_modelo
+
+Referência do código: SANTOS, Rafael. Introdução à programação orientada a objetos usando Java. Rio de Janeiro: Elsevier, 2003. 

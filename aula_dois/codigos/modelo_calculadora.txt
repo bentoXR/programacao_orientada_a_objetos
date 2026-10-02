@@ -1,0 +1,19 @@
+Modelo Calculadora
+inicio_modelo
+  dado n1,n2;
+  
+  operacao soma()
+  inicio_operacao
+    dado soma;
+    soma = n1+n2;
+    imprimir soma;
+  fim_operacao
+  
+   operacao subtrair()
+  inicio_operacao
+    dado sub;
+    sub = n1-n2;
+    imprimir sub;
+  fim_operacao 
+  
+fim_modelo
