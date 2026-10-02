@@ -154,14 +154,29 @@
       display: flex;
       flex-direction: column;
 
-      gap: 8px;
+      gap: 10px;
 
       background: #fff;
     }
 
-    .poo-chat-mensagem {
+    .poo-chat-mensagem-container {
+      display: flex;
+      flex-direction: column;
+
       max-width: 85%;
 
+      gap: 4px;
+    }
+
+    .poo-chat-mensagem-container.user {
+      align-self: flex-end;
+    }
+
+    .poo-chat-mensagem-container.ia {
+      align-self: flex-start;
+    }
+
+    .poo-chat-mensagem {
       padding: 9px 11px;
 
       border-radius: 10px;
@@ -176,19 +191,41 @@
     }
 
     .poo-chat-user {
-      align-self: flex-end;
-
       background: #e9e9e9;
 
       color: #111;
     }
 
     .poo-chat-ia {
-      align-self: flex-start;
-
       background: #f5f5f5;
 
       color: #111;
+    }
+
+    .poo-chat-copiar {
+      align-self: flex-start;
+
+      border: none;
+
+      background: transparent;
+
+      color: #777;
+
+      padding: 2px 5px;
+
+      font-size: 11px;
+
+      cursor: pointer;
+
+      opacity: 0.7;
+
+      transition: opacity 0.15s ease;
+    }
+
+    .poo-chat-copiar:hover {
+      opacity: 1;
+
+      color: #222;
     }
 
     #poo-chat-area {
@@ -248,6 +285,7 @@
 
     #poo-chat-enviar:disabled {
       opacity: 0.5;
+
       cursor: default;
     }
 
@@ -331,6 +369,11 @@
   // =========================
 
   function adicionarMensagem(tipo, texto) {
+    const container = document.createElement("div");
+
+    container.className =
+      "poo-chat-mensagem-container " + tipo;
+
     const div = document.createElement("div");
 
     div.className =
@@ -341,11 +384,66 @@
 
     div.textContent = texto;
 
-    mensagens.appendChild(div);
+    container.appendChild(div);
+
+    // Botão copiar somente para respostas da IA
+    if (tipo === "ia") {
+      const copiar = document.createElement("button");
+
+      copiar.className = "poo-chat-copiar";
+      copiar.textContent = "Copiar";
+
+      copiar.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(texto);
+
+          copiar.textContent = "Copiado!";
+
+          setTimeout(() => {
+            copiar.textContent = "Copiar";
+          }, 1500);
+
+        } catch (erro) {
+          console.error("Erro ao copiar:", erro);
+
+          // Fallback para navegadores que bloqueiam clipboard
+          const areaTexto = document.createElement("textarea");
+
+          areaTexto.value = texto;
+
+          document.body.appendChild(areaTexto);
+
+          areaTexto.select();
+
+          try {
+            document.execCommand("copy");
+
+            copiar.textContent = "Copiado!";
+
+            setTimeout(() => {
+              copiar.textContent = "Copiar";
+            }, 1500);
+
+          } catch {
+            copiar.textContent = "Erro ao copiar";
+
+            setTimeout(() => {
+              copiar.textContent = "Copiar";
+            }, 1500);
+          }
+
+          areaTexto.remove();
+        }
+      });
+
+      container.appendChild(copiar);
+    }
+
+    mensagens.appendChild(container);
 
     mensagens.scrollTop = mensagens.scrollHeight;
 
-    return div;
+    return container;
   }
 
   // =========================
@@ -396,7 +494,6 @@
     }
   });
 
-  // Impede que clicar dentro do chat feche o painel
   painel.addEventListener("click", (evento) => {
     evento.stopPropagation();
   });
@@ -492,8 +589,16 @@
     } catch (erro) {
       console.error("Erro no chat:", erro);
 
-      pensando.textContent =
-        "Não consegui responder agora. Tente novamente.";
+      pensando.querySelector?.(".poo-chat-mensagem");
+
+      const textoErro = pensando.querySelector
+        ? pensando.querySelector(".poo-chat-mensagem")
+        : null;
+
+      if (textoErro) {
+        textoErro.textContent =
+          "Não consegui responder agora. Tente novamente.";
+      }
 
     } finally {
       input.disabled = false;
