@@ -62,11 +62,11 @@
   estilo.textContent = `
     #poo-chat-botao {
       position: fixed;
-      right: 18px;
-      bottom: 18px;
+      right: 10px;
+      bottom: 10px;
 
-      width: 12px;
-      height: 12px;
+      width: 7px;
+      height: 7px;
 
       padding: 0;
       border: none;
@@ -74,7 +74,7 @@
 
       background: #ffffff;
 
-      opacity: 0.15;
+      opacity: 0.04;
 
       cursor: pointer;
 
@@ -88,25 +88,25 @@
     }
 
     #poo-chat-botao:hover {
-      width: 16px;
-      height: 16px;
+      width: 13px;
+      height: 13px;
 
-      opacity: 0.9;
+      opacity: 0.7;
 
-      box-shadow: 0 0 10px rgba(255,255,255,0.7);
+      box-shadow: 0 0 8px rgba(255,255,255,0.5);
     }
 
     #poo-chat-painel {
       position: fixed;
 
-      right: 18px;
-      bottom: 45px;
+      right: 14px;
+      bottom: 28px;
 
       width: 360px;
-      max-width: calc(100vw - 36px);
+      max-width: calc(100vw - 28px);
 
       height: 500px;
-      max-height: calc(100vh - 80px);
+      max-height: calc(100vh - 55px);
 
       background: #ffffff;
 
@@ -130,7 +130,7 @@
       align-items: center;
       justify-content: space-between;
 
-      padding: 12px 14px;
+      padding: 10px 14px;
 
       background: #f7f7f7;
 
@@ -141,16 +141,7 @@
     }
 
     #poo-chat-fechar {
-      border: none;
-      background: transparent;
-
-      font-size: 20px;
-
-      cursor: pointer;
-
-      color: #666;
-
-      line-height: 1;
+      display: none;
     }
 
     #poo-chat-mensagens {
@@ -262,17 +253,17 @@
 
     @media (max-width: 500px) {
       #poo-chat-painel {
-        right: 10px;
-        bottom: 38px;
+        right: 8px;
+        bottom: 25px;
 
-        width: calc(100vw - 20px);
+        width: calc(100vw - 16px);
 
         height: 70vh;
       }
 
       #poo-chat-botao {
-        right: 12px;
-        bottom: 12px;
+        right: 8px;
+        bottom: 8px;
       }
     }
   `;
@@ -335,10 +326,8 @@
   document.body.appendChild(botao);
   document.body.appendChild(painel);
 
-  const fechar = document.getElementById("poo-chat-fechar");
-
   // =========================
-  // ADICIONAR MENSAGEM NA TELA
+  // ADICIONAR MENSAGEM
   // =========================
 
   function adicionarMensagem(tipo, texto) {
@@ -350,7 +339,6 @@
         ? "poo-chat-user"
         : "poo-chat-ia");
 
-    // textContent evita que HTML enviado pela IA seja executado
     div.textContent = texto;
 
     mensagens.appendChild(div);
@@ -361,7 +349,7 @@
   }
 
   // =========================
-  // RECONSTRUIR HISTÓRICO
+  // RESTAURAR HISTÓRICO
   // =========================
 
   if (historico.length > 0) {
@@ -379,29 +367,42 @@
   }
 
   // =========================
-  // ABRIR / FECHAR
+  // ABRIR CHAT
   // =========================
 
-  botao.addEventListener("click", () => {
-    const aberto = painel.style.display === "flex";
+  botao.addEventListener("click", (evento) => {
+    evento.stopPropagation();
 
-    painel.style.display = aberto ? "none" : "flex";
+    painel.style.display = "flex";
 
-    if (!aberto) {
-      input.focus();
+    input.focus();
 
-      setTimeout(() => {
-        mensagens.scrollTop = mensagens.scrollHeight;
-      }, 50);
+    setTimeout(() => {
+      mensagens.scrollTop = mensagens.scrollHeight;
+    }, 50);
+  });
+
+  // =========================
+  // FECHAR CLICANDO FORA
+  // =========================
+
+  document.addEventListener("click", (evento) => {
+    if (
+      painel.style.display === "flex" &&
+      !painel.contains(evento.target) &&
+      evento.target !== botao
+    ) {
+      painel.style.display = "none";
     }
   });
 
-  fechar.addEventListener("click", () => {
-    painel.style.display = "none";
+  // Impede que clicar dentro do chat feche o painel
+  painel.addEventListener("click", (evento) => {
+    evento.stopPropagation();
   });
 
   // =========================
-  // ENVIAR MENSAGEM
+  // ENVIAR
   // =========================
 
   async function enviarMensagem() {
@@ -425,7 +426,6 @@
     input.disabled = true;
     enviar.disabled = true;
 
-    // Adiciona mensagem do usuário
     historico.push({
       role: "user",
       content: texto
@@ -437,7 +437,6 @@
 
     adicionarMensagem("user", texto);
 
-    // Mensagem temporária
     const pensando = adicionarMensagem("ia", "Pensando...");
 
     try {
@@ -477,10 +476,8 @@
         throw new Error("A IA não retornou uma resposta.");
       }
 
-      // Remove "Pensando..."
       pensando.remove();
 
-      // Salva resposta da IA
       historico.push({
         role: "assistant",
         content: respostaIA
@@ -490,7 +487,6 @@
 
       salvarHistorico();
 
-      // Mostra resposta
       adicionarMensagem("ia", respostaIA);
 
     } catch (erro) {
@@ -510,7 +506,7 @@
   enviar.addEventListener("click", enviarMensagem);
 
   // Enter envia
-  // Shift + Enter cria uma nova linha
+  // Shift + Enter cria nova linha
   input.addEventListener("keydown", (evento) => {
     if (
       evento.key === "Enter" &&
