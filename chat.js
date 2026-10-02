@@ -2,8 +2,8 @@
 // Troque WORKER_URL pela URL do seu Cloudflare Worker.
 (function () {
   const WORKER_URL = "https://floral-shadow-0a19.bentoxrxr.workers.dev";
-  const MAX_HISTORICO = 10;
-  const MAX_CARACTERES = 4000;
+  const MAX_HISTORICO = 100;
+  const MAX_CARACTERES = 10000;
   // O chat só aparece nas páginas cujo endereço contém um destes trechos.
   const PAGINAS_COM_CHAT = ["/aula_tres/"];
   if (!PAGINAS_COM_CHAT.some((p) => location.pathname.includes(p))) return;
