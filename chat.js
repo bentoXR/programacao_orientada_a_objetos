@@ -14,8 +14,10 @@
   // ---------------- HISTÓRICO ----------------
   const CHAVE_HISTORICO = "poo_chat_historico";
   let historico = [];
+  // Apaga o histórico antigo que ficava salvo para sempre no navegador
+  try { localStorage.removeItem(CHAVE_HISTORICO); } catch (e) {}
   try {
-    const salvo = localStorage.getItem(CHAVE_HISTORICO);
+    const salvo = sessionStorage.getItem(CHAVE_HISTORICO);
     if (salvo) {
       const convertido = JSON.parse(salvo);
       if (Array.isArray(convertido)) historico = convertido;
@@ -27,7 +29,7 @@
   function salvarHistorico() {
     try {
       if (historico.length > MAX_HISTORICO) historico = historico.slice(-MAX_HISTORICO);
-      localStorage.setItem(CHAVE_HISTORICO, JSON.stringify(historico));
+      sessionStorage.setItem(CHAVE_HISTORICO, JSON.stringify(historico));
     } catch (erro) {
       console.warn("Não foi possível salvar o histórico:", erro);
     }
@@ -82,6 +84,9 @@
     #poo-chat-fechar{width:24px;height:24px;padding:0;border:none;border-radius:5px;background:transparent;
       font-size:20px;line-height:20px;cursor:pointer}
     #poo-chat-fechar:hover{background:#ddd}
+    #poo-chat-limpar{padding:3px 7px;margin-right:6px;border:1px solid #ccc;border-radius:5px;background:#fff;
+      font-size:11px;cursor:pointer}
+    #poo-chat-limpar:hover{background:#eee}
     #poo-chat-mensagens{flex:1;min-height:0;overflow-y:auto;padding:10px;background:#fff}
     .poo-chat-mensagem{margin-bottom:10px;padding:8px 10px;border-radius:8px;font-size:13px;line-height:1.4;
       white-space:pre-wrap;word-wrap:break-word;overflow-wrap:break-word}
@@ -112,7 +117,10 @@
   painel.innerHTML = `
     <div id="poo-chat-cabecalho">
       <span>Assistente de POO</span>
-      <button id="poo-chat-fechar" type="button" title="Fechar">×</button>
+      <span>
+        <button id="poo-chat-limpar" type="button" title="Apagar a conversa">Limpar</button>
+        <button id="poo-chat-fechar" type="button" title="Fechar">×</button>
+      </span>
     </div>
     <div id="poo-chat-mensagens"></div>
     <div id="poo-chat-chip">
@@ -266,6 +274,12 @@
     }
   });
   fechar.addEventListener("click", () => { painel.style.display = "none"; });
+  document.getElementById("poo-chat-limpar").addEventListener("click", function () {
+    historico = [];
+    try { sessionStorage.removeItem(CHAVE_HISTORICO); } catch (e) {}
+    mensagens.innerHTML = "";
+    limparArquivo();
+  });
   document.addEventListener("pointerdown", function (evento) {
     if (painel.style.display !== "flex") return;
     if (!painel.contains(evento.target) && !botao.contains(evento.target)) painel.style.display = "none";
