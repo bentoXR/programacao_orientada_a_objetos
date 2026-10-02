@@ -1,0 +1,173 @@
+//caminho padrão para imagens
+:imagesdir: 
+:figure-caption: Figura
+:doctype: book
+
+//gera apresentacao
+//pode se baixar os arquivos e add no diretório
+:revealjsdir: https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0
+
+//GERAR ARQUIVOS
+//make slides
+//make ebook
+
+== Diferenças entre PE e POO
+
+image::imagens/img1.png[]
+
+image::imagens/img2.png[]
+
+image::imagens/img4.png[]
+
+image::imagens/img3.png[]
+
+image::imagens/img6.png[]
+
+image::imagens/img12.png[]
+
+image::imagens/img7.png[]
+
+image::imagens/img9.png[]
+
+image::imagens/img10.png[]
+
+image::imagens/img8.png[]
+
+image::imagens/img14.png[]
+
+image::imagens/img13.png[]
+
+image::imagens/img5.png[]
+
+== Verificação / Instalação do OpenJDK
+
+Para verificar ou instalar o OpenJDK, acesse os links disponibilizados a seguir:
+
+- OPENJDK. How to download and install prebuilt OpenJDK packages. Disponível em: https://openjdk.java.net/install/. Acesso em: 29 de jan. 2022.
+- ORACLE. Como posso definir ou alterar a variável do sistema PATH? Disponível em: https://www.java.com/pt_BR/download/help/path.xml. Acesso em: 29 de jan. 2022.
+
+== Instalação da IDE Intellij
+
+Após a instalação do openJDK, o próximo passo é instalar a IDE, para fazer isso, basta usar o comando disponível abaixo:
+
+- sudo snap install intellij-idea-community --classic
+
+== Comandos javac e java
+
+A linguagem Java foi criada baseando nos princípios da orientação a objetos. Além de abordar os comandos sequenciais, desvios condicionais e laços de repetição,características típicas das linguagens estruturadas, esta linguagem usa os seguintes conceitos / recursos:
+
+- abstração;
+- classes; 
+- objetos; 
+- métodos; 
+- variáveis de instância; 
+- modificadores de acesso; 
+- encapsulamento;
+- relacionamentos: generalização, associação, agregação e composição; 
+- classes abstratas; 
+- interfaces;
+- polimorfismo;
+- coleções;
+- tratamento de exceções;
+- arquivos;
+- outros.
+
+Não é necessário ter uma IDE para criar um aplicativo usando a linguagem Java. Se o JDK já estiver instalado, basta usar o bloco de notas para fazer a codificação e depois usar os comandos javac (compilador) e java (máquina virtual) para realizar as etapas de compilação e execução. Portanto, as etapas envolvidas no processo de criação de um aplicativo, pode ser resumidas em:
+
+- codificação: o programador usa a sintaxe da linguagem para escrever um programa. Pode ser usado um editor de texto ou o editor de uma IDE;
+- compilação: o código-fonte passa por um processo de tradução. O compilador (comando javac) converte o código-fonte em linguagem de máquina, neste caso, uma linguagem específica para a máquina virtual. Esses códigos traduzidos são chamados de bytecodes.
+- interpretação: os bytecodes são lidos pela máquina virtual (comando java) e são executados.
+
+Inicialmente verifique se o JDK está instalado na sua máquina, use o comando java --version. Caso este esteja devidamente instalado, a versão do JDK será impressa. Caso seja impressa a mensagem "comando não encontrado", pode ser que o JDK ainda não foi instalado ou não foi configurado devidamente. 
+
+== Fundamentos de POO
+
+O paradigma orientado a objetos é um modelo criado para resolver os problemas usando conceitos mais próximos de como compreendemos o mundo no qual interagimos.  
+
+"Pode-se dizer, então, que o termo “paradigma da orientação a objetos” é uma forma de abordar um problema. Há alguns anos, Alan Kay, um dos pais do paradigma da orientação a objetos, formulou a chamada “analogia biológica”. Nessa analogia, ele imaginou como seria um sistema de software que funcionasse como um ser vivo. Nesse sistema, cada “célula” interagiria com outras células através do envio de mensagens para realizar um objetivo comum. Além disso, cada célula se comportaria como uma unidade autônoma" (BEZERRA, p. 5, 2007).
+
+- Referência do texto entre aspas: BEZERRA, E. Princípios de Análise e Projeto de Sistemas com UML. Rio de Janeiro: Elsevier, 2007.
+
+Dessa forma, podemos entender que num sistema orientado a objetos tem-se: 
+
+- as classes são usadas para modelarem os objetos; 
+- esses objetos que residem na memória possuem características e funcionalidades; 
+- os objetos trocam mensagens; 
+- essas trocas de mensagens configuram o funcionamento do sistema.
+
+Características da programação estruturada:
+
+- programação top-down;
+- comandos sequenciais;
+- desvio condicional;
+- laço de repetição;
+- modularização.
+
+Características da progração orientada a objetos:
+
+- abstração;
+- classes;
+- objetos;
+- atributos;
+- métodos;
+- encapsulamento;
+- pacotes;
+- interface;
+- classes abstratas;
+- polimorfismo.
+
+O funcionamento de um sistema OO se dá pela interação entre os conjuntos de objetos trocados, ou seja, troca de mensagens.
+
+Pilares da POO:
+
+- encapsulamento;
+- herança;
+- polimorfismo.
+
+Exemplos de modelo:
+
+- maquete;
+- planta de uma casa;
+- receita de bolo.
+
+Definição de classe:
+
+- modelo;
+- determina os atributos e os comportamentos;
+- define a estrutura de elementos semelhantes.
+
+Definição de objeto:
+
+- é uma instanciação de uma classe;
+- representação da classe na memória virtual;
+- cada objeto tem seu estado e acessa os métodos criados na classe.
+
+Estado do objeto: valor da variável de instância em um determinado momento.
+
+Métodos do objeto: são ações que o objeto desempenha. Através deles, os valores dos atributos são modificados.
+
+Exemplos práticos:
+
+link:classes/Cachorro.java[classe Cachorro]
+
+link:classes/Principal_Cachorro.java[classe Principal]
+
+Exemplos práticos:
+
+link:classes/Cachorro.java[classe Cachorro]
+
+link:classes/Principal_Cachorro2.java[classe Principal]
+
+Abstração de classe: concentrar nas características relevantes para a modelagem das classes no sistema. Exemplo: qual seria a modelagem de uma pessoa em um sistema para escola, um sistema para auxiliar um médico e um sistema para academia?
+
+Exemplos práticos (diferenças entre PE e POO):
+
+link:classes/IMCEstruturado.java[classe IMCEstruturado]
+
+link:classes/IMCOO.java[classe IMCOO]
+
+link:classes/Pessoa.java[classe Pessoa]
+
+image::imagens/img11.png[]
+
+
