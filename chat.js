@@ -102,11 +102,8 @@
       right: 14px;
       bottom: 28px;
 
-      width: 360px;
-      max-width: calc(100vw - 28px);
-
-      height: 500px;
-      max-height: calc(100vh - 55px);
+      width: 420px;
+      height: 320px;
 
       background: #ffffff;
 
@@ -130,13 +127,13 @@
       align-items: center;
       justify-content: space-between;
 
-      padding: 10px 14px;
+      padding: 8px 12px;
 
       background: #f7f7f7;
 
       border-bottom: 1px solid #ddd;
 
-      font-size: 14px;
+      font-size: 13px;
       font-weight: bold;
     }
 
@@ -149,12 +146,12 @@
 
       overflow-y: auto;
 
-      padding: 12px;
+      padding: 10px;
 
       display: flex;
       flex-direction: column;
 
-      gap: 10px;
+      gap: 8px;
 
       background: #fff;
     }
@@ -165,7 +162,7 @@
 
       max-width: 85%;
 
-      gap: 4px;
+      gap: 3px;
     }
 
     .poo-chat-mensagem-container.user {
@@ -177,13 +174,13 @@
     }
 
     .poo-chat-mensagem {
-      padding: 9px 11px;
+      padding: 8px 10px;
 
-      border-radius: 10px;
+      border-radius: 9px;
 
-      font-size: 14px;
+      font-size: 13px;
 
-      line-height: 1.4;
+      line-height: 1.35;
 
       white-space: pre-wrap;
 
@@ -233,7 +230,7 @@
 
       gap: 8px;
 
-      padding: 10px;
+      padding: 8px;
 
       border-top: 1px solid #ddd;
 
@@ -245,10 +242,10 @@
 
       resize: none;
 
-      min-height: 42px;
-      max-height: 120px;
+      min-height: 38px;
+      max-height: 100px;
 
-      padding: 9px;
+      padding: 8px;
 
       border: 1px solid #ccc;
       border-radius: 8px;
@@ -256,7 +253,7 @@
       outline: none;
 
       font-family: inherit;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     #poo-chat-input:focus {
@@ -287,22 +284,6 @@
       opacity: 0.5;
 
       cursor: default;
-    }
-
-    @media (max-width: 500px) {
-      #poo-chat-painel {
-        right: 8px;
-        bottom: 25px;
-
-        width: calc(100vw - 16px);
-
-        height: 70vh;
-      }
-
-      #poo-chat-botao {
-        right: 8px;
-        bottom: 8px;
-      }
     }
   `;
 
@@ -484,19 +465,22 @@
   // FECHAR CLICANDO FORA
   // =========================
 
-  document.addEventListener("click", (evento) => {
-    if (
-      painel.style.display === "flex" &&
-      !painel.contains(evento.target) &&
-      evento.target !== botao
-    ) {
-      painel.style.display = "none";
-    }
-  });
+  document.addEventListener(
+    "pointerdown",
+    (evento) => {
+      if (painel.style.display !== "flex") {
+        return;
+      }
 
-  painel.addEventListener("click", (evento) => {
-    evento.stopPropagation();
-  });
+      const clicouNoPainel = painel.contains(evento.target);
+      const clicouNoBotao = botao.contains(evento.target);
+
+      if (!clicouNoPainel && !clicouNoBotao) {
+        painel.style.display = "none";
+      }
+    },
+    true
+  );
 
   // =========================
   // ENVIAR
@@ -589,8 +573,6 @@
     } catch (erro) {
       console.error("Erro no chat:", erro);
 
-      pensando.querySelector?.(".poo-chat-mensagem");
-
       const textoErro = pensando.querySelector
         ? pensando.querySelector(".poo-chat-mensagem")
         : null;
@@ -610,8 +592,11 @@
 
   enviar.addEventListener("click", enviarMensagem);
 
-  // Enter envia
-  // Shift + Enter cria nova linha
+  // =========================
+  // ENTER ENVIA
+  // SHIFT + ENTER = NOVA LINHA
+  // =========================
+
   input.addEventListener("keydown", (evento) => {
     if (
       evento.key === "Enter" &&
