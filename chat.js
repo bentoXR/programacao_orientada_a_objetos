@@ -81,28 +81,32 @@
 
   estiloBotao.textContent = `
     #poo-chat-botao {
-  width: 50px !important;
-  height: 50px !important;
+      width: 70px !important;
+      height: 70px !important;
 
-  min-width: 50px !important;
-  min-height: 50px !important;
+      min-width: 70px !important;
+      min-height: 70px !important;
 
-  max-width: 50px !important;
-  max-height: 50px !important;
-}
+      max-width: 70px !important;
+      max-height: 70px !important;
 
-   #poo-chat-botao:hover {
-  width: 60px !important;
-  height: 60px !important;
+      transition: all 0.3s ease !important;
+    }
 
-  min-width: 60px !important;
-  min-height: 60px !important;
+    #poo-chat-botao:hover {
+      width: 75px !important;
+      height: 75px !important;
 
-  max-width: 60px !important;
-  max-height: 60px !important;
+      min-width: 75px !important;
+      min-height: 75px !important;
 
-  border: 3px solid #000000 !important;
-}
+      max-width: 75px !important;
+      max-height: 75px !important;
+
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      border: 3px solid #000000 !important;
+    }
 
     #poo-chat-botao:focus {
       outline: none !important;
@@ -113,8 +117,8 @@
     }
 
     /* ----------------------------------------------------------
-       PAINEL
-       ---------------------------------------------------------- */
+        PAINEL
+        ---------------------------------------------------------- */
 
     #poo-chat-painel {
       position: fixed;
