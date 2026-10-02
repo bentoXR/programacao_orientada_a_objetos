@@ -86,14 +86,14 @@
       right: 12px !important;
       bottom: 12px !important;
 
-      width: 14px !important;
-      height: 14px !important;
+      width: 28px !important;
+      height: 28px !important;
 
-      min-width: 14px !important;
-      min-height: 14px !important;
+      min-width: 28px !important;
+      min-height: 28px !important;
 
-      max-width: 14px !important;
-      max-height: 14px !important;
+      max-width: 28px !important;
+      max-height: 28px !important;
 
       padding: 0 !important;
       margin: 0 !important;
@@ -125,14 +125,14 @@
     }
 
     #poo-chat-botao:hover {
-      width: 20px !important;
-      height: 20px !important;
+      width: 34px !important;
+      height: 34px !important;
 
-      min-width: 20px !important;
-      min-height: 20px !important;
+      min-width: 34px !important;
+      min-height: 34px !important;
 
-      max-width: 20px !important;
-      max-height: 20px !important;
+      max-width: 34px !important;
+      max-height: 34px !important;
 
       opacity: 1 !important;
 
@@ -153,58 +153,11 @@
     #poo-chat-botao:active {
       transform: scale(0.92) !important;
     }
-  `;
 
-  document.head.appendChild(estiloBotao);
+    /* ----------------------------------------------------------
+       PAINEL
+       ---------------------------------------------------------- */
 
-  // ------------------------------------------------------------
-  // PAINEL
-  // ------------------------------------------------------------
-
-  const painel = document.createElement("div");
-
-  painel.id = "poo-chat-painel";
-
-  painel.innerHTML = `
-    <div id="poo-chat-cabecalho">
-      <span>Assistente de POO</span>
-
-      <button
-        id="poo-chat-fechar"
-        type="button"
-        title="Fechar"
-      >
-        ×
-      </button>
-    </div>
-
-    <div id="poo-chat-mensagens"></div>
-
-    <div id="poo-chat-area-input">
-      <textarea
-        id="poo-chat-input"
-        placeholder="Cole a questão aqui..."
-        maxlength="${MAX_CARACTERES}"
-      ></textarea>
-
-      <button
-        id="poo-chat-enviar"
-        type="button"
-      >
-        Enviar
-      </button>
-    </div>
-  `;
-
-  document.body.appendChild(painel);
-
-  // ------------------------------------------------------------
-  // ESTILO DO PAINEL
-  // ------------------------------------------------------------
-
-  const estiloPainel = document.createElement("style");
-
-  estiloPainel.textContent = `
     #poo-chat-painel {
       position: fixed;
 
@@ -405,7 +358,48 @@
     }
   `;
 
-  document.head.appendChild(estiloPainel);
+  document.head.appendChild(estiloBotao);
+
+  // ------------------------------------------------------------
+  // PAINEL
+  // ------------------------------------------------------------
+
+  const painel = document.createElement("div");
+
+  painel.id = "poo-chat-painel";
+
+  painel.innerHTML = `
+    <div id="poo-chat-cabecalho">
+      <span>Assistente de POO</span>
+
+      <button
+        id="poo-chat-fechar"
+        type="button"
+        title="Fechar"
+      >
+        ×
+      </button>
+    </div>
+
+    <div id="poo-chat-mensagens"></div>
+
+    <div id="poo-chat-area-input">
+      <textarea
+        id="poo-chat-input"
+        placeholder="Cole a questão aqui..."
+        maxlength="${MAX_CARACTERES}"
+      ></textarea>
+
+      <button
+        id="poo-chat-enviar"
+        type="button"
+      >
+        Enviar
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(painel);
 
   // ------------------------------------------------------------
   // ELEMENTOS
@@ -496,9 +490,6 @@
             }, 1200);
 
           } catch (erro) {
-            // Fallback para navegadores
-            // que não permitem Clipboard API.
-
             const area =
               document.createElement(
                 "textarea"
@@ -661,13 +652,11 @@
 
     input.value = "";
 
-    // Mostra a pergunta.
     adicionarMensagem(
       pergunta,
       "usuario"
     );
 
-    // Salva no histórico.
     historico.push({
       tipo: "usuario",
       texto: pergunta
@@ -678,7 +667,7 @@
     enviar.disabled = true;
 
     // ----------------------------------------------------------
-    // MENSAGEM DE CARREGAMENTO
+    // CARREGANDO
     // ----------------------------------------------------------
 
     const carregando =
@@ -738,14 +727,12 @@
         dados.message ||
         "Não foi possível obter uma resposta.";
 
-      // Mostra resposta.
       adicionarMensagem(
         textoResposta,
         "assistente",
         true
       );
 
-      // Salva resposta.
       historico.push({
         tipo: "assistente",
         texto: textoResposta
@@ -785,7 +772,7 @@
   }
 
   // ------------------------------------------------------------
-  // EVENTO DO BOTÃO ENVIAR
+  // EVENTOS
   // ------------------------------------------------------------
 
   enviar.addEventListener(
@@ -793,14 +780,12 @@
     enviarPergunta
   );
 
-  // ------------------------------------------------------------
-  // ENTER ENVIA
-  // SHIFT + ENTER FAZ NOVA LINHA
-  // ------------------------------------------------------------
-
   input.addEventListener(
     "keydown",
     (evento) => {
+      // Enter envia.
+      // Shift + Enter cria uma nova linha.
+
       if (
         evento.key === "Enter" &&
         !evento.shiftKey
