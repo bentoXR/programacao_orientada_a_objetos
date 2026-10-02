@@ -1,8 +1,12 @@
 // Chat de IA para o site de POO em Java.
 // Troque WORKER_URL pela URL do seu Cloudflare Worker.
 (function () {
-  const WORKER_URL = "https://floral-shadow-0a19.bentoxrxr.workers.dev/";
+  const WORKER_URL = "https://floral-shadow-0a19.bentoxrxr.workers.dev";
   const MAX_HISTORICO = 10;
+  const MAX_CARACTERES = 4000;
+  // O chat só aparece nas páginas cujo endereço contém um destes trechos.
+  const PAGINAS_COM_CHAT = ["/aula_tres/"];
+  if (!PAGINAS_COM_CHAT.some((p) => location.pathname.includes(p))) return;
   const historico = [];
 
   const css = `
@@ -22,12 +26,12 @@
   .poo-msg.erro{align-self:flex-start;background:#fde8e4;color:#7a1f10}
   .poo-msg code,.poo-msg pre{font-family:ui-monospace,Consolas,monospace;font-size:13px}
   #poo-chat-form{display:flex;gap:6px;padding:10px;border-top:1px solid #ddd}
-  #poo-chat-form input{flex:1;padding:8px 10px;border:1px solid #bbb;border-radius:6px;font:inherit}
+  #poo-chat-form textarea{flex:1;padding:8px 10px;border:1px solid #bbb;border-radius:6px;font:inherit;resize:none;max-height:140px}
   #poo-chat-form button{border:0;border-radius:6px;padding:8px 14px;background:#b8442a;color:#fff;font:inherit;font-weight:600;cursor:pointer}
   #poo-chat-form button:disabled{opacity:.5;cursor:default}
   @media (prefers-color-scheme:dark){#poo-chat{background:#1e1e1e;color:#eee;border-color:#444}
     #poo-chat header,#poo-chat-form{border-color:#444}.poo-msg.ia{background:#2c2c2c}
-    #poo-chat-form input{background:#2c2c2c;color:#eee;border-color:#555}}`;
+    #poo-chat-form textarea{background:#2c2c2c;color:#eee;border-color:#555}}`;
   const style = document.createElement("style");
   style.textContent = css;
   document.head.appendChild(style);
@@ -42,13 +46,16 @@
   painel.setAttribute("aria-label", "Chat com a IA");
   painel.innerHTML = `<header>Assistente de POO em Java</header>
     <div id="poo-chat-msgs" aria-live="polite"></div>
-    <form id="poo-chat-form"><input type="text" placeholder="Pergunte sobre a aula..." aria-label="Sua pergunta" maxlength="1000" required>
+    <form id="poo-chat-form"><textarea rows="2" placeholder="Pergunte ou cole um código (Enter envia, Shift+Enter quebra a linha)" aria-label="Sua pergunta" maxlength="${MAX_CARACTERES}" required></textarea>
     <button type="submit">Enviar</button></form>`;
   document.body.append(btn, painel);
 
   const msgs = painel.querySelector("#poo-chat-msgs");
   const form = painel.querySelector("#poo-chat-form");
-  const input = form.querySelector("input");
+  const input = form.querySelector("textarea");
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); }
+  });
   const enviar = form.querySelector("button");
 
   function add(tipo, texto) {
