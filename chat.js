@@ -184,6 +184,31 @@
     }
   });
 
+  // Arrastar e soltar: solte o arquivo em qualquer lugar da página
+  function temArquivos(e) {
+    return e.dataTransfer && Array.from(e.dataTransfer.types || []).includes("Files");
+  }
+  document.addEventListener("dragover", function (e) {
+    if (!temArquivos(e)) return;
+    e.preventDefault(); // permite soltar e evita que o navegador abra o PDF
+    painel.style.display = "flex";
+    painel.style.outline = "3px dashed #000";
+  });
+  document.addEventListener("dragleave", function (e) {
+    if (!e.relatedTarget) painel.style.outline = "";
+  });
+  document.addEventListener("drop", function (e) {
+    if (!temArquivos(e)) return;
+    e.preventDefault();
+    painel.style.outline = "";
+    const arquivos = e.dataTransfer.files;
+    if (arquivos.length > 1) {
+      adicionarMensagem("Só dá para anexar um arquivo por vez. Usei o primeiro: " + arquivos[0].name, "assistente", false);
+    }
+    definirArquivo(arquivos[0]);
+    input.focus();
+  });
+
   // ---------------- MENSAGENS ----------------
   function adicionarMensagem(texto, tipo, mostrarBotaoCopiar) {
     const mensagem = document.createElement("div");
