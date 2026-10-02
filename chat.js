@@ -1,4 +1,3 @@
-
 // Chat de IA para o site de POO em Java.
 // Troque WORKER_URL pela URL do seu Cloudflare Worker.
 
@@ -70,6 +69,7 @@
 
   botao.id = "poo-chat-botao";
   botao.title = "Abrir assistente";
+  botao.setAttribute("aria-label", "Abrir assistente");
 
   document.body.appendChild(botao);
 
@@ -81,43 +81,77 @@
 
   estiloBotao.textContent = `
     #poo-chat-botao {
-      position: fixed;
-      right: 10px;
-      bottom: 10px;
+      position: fixed !important;
 
-      width: 9px;
-      height: 9px;
+      right: 12px !important;
+      bottom: 12px !important;
 
-      padding: 0;
+      width: 14px !important;
+      height: 14px !important;
 
-      border: 1px solid transparent;
-      border-radius: 50%;
+      min-width: 14px !important;
+      min-height: 14px !important;
 
-      background: #ffffff;
+      max-width: 14px !important;
+      max-height: 14px !important;
 
-      opacity: 0.08;
+      padding: 0 !important;
+      margin: 0 !important;
 
-      cursor: pointer;
+      border: 2px solid transparent !important;
+      border-radius: 50% !important;
 
-      z-index: 999999;
+      background: #ffffff !important;
+
+      opacity: 0.18 !important;
+
+      cursor: pointer !important;
+
+      z-index: 999999 !important;
+
+      box-sizing: border-box !important;
+
+      appearance: none !important;
+      -webkit-appearance: none !important;
+
+      outline: none !important;
 
       transition:
         width 0.2s ease,
         height 0.2s ease,
         opacity 0.2s ease,
         border-color 0.2s ease,
-        box-shadow 0.2s ease;
+        box-shadow 0.2s ease !important;
     }
 
     #poo-chat-botao:hover {
-      width: 15px;
-      height: 15px;
+      width: 20px !important;
+      height: 20px !important;
 
-      opacity: 0.9;
+      min-width: 20px !important;
+      min-height: 20px !important;
 
-      border-color: #000000;
+      max-width: 20px !important;
+      max-height: 20px !important;
 
-      box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+      opacity: 1 !important;
+
+      border: 2px solid #000000 !important;
+      border-color: #000000 !important;
+
+      background: #ffffff !important;
+
+      box-shadow:
+        0 0 0 1px #000000 !important,
+        0 0 8px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    #poo-chat-botao:focus {
+      outline: none !important;
+    }
+
+    #poo-chat-botao:active {
+      transform: scale(0.92) !important;
     }
   `;
 
@@ -199,6 +233,8 @@
         sans-serif;
 
       overflow: hidden;
+
+      box-sizing: border-box;
     }
 
     #poo-chat-cabecalho {
@@ -248,6 +284,8 @@
       padding: 10px;
 
       background: #ffffff;
+
+      min-height: 0;
     }
 
     .poo-chat-mensagem {
@@ -263,6 +301,7 @@
       white-space: pre-wrap;
 
       word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     .poo-chat-usuario {
@@ -328,8 +367,14 @@
 
       outline: none;
 
-      font-family: Arial, Helvetica, sans-serif;
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
       font-size: 13px;
+
+      box-sizing: border-box;
     }
 
     #poo-chat-input:focus {
@@ -366,21 +411,25 @@
   // ELEMENTOS
   // ------------------------------------------------------------
 
-  const mensagens = document.getElementById(
-    "poo-chat-mensagens"
-  );
+  const mensagens =
+    document.getElementById(
+      "poo-chat-mensagens"
+    );
 
-  const input = document.getElementById(
-    "poo-chat-input"
-  );
+  const input =
+    document.getElementById(
+      "poo-chat-input"
+    );
 
-  const enviar = document.getElementById(
-    "poo-chat-enviar"
-  );
+  const enviar =
+    document.getElementById(
+      "poo-chat-enviar"
+    );
 
-  const fechar = document.getElementById(
-    "poo-chat-fechar"
-  );
+  const fechar =
+    document.getElementById(
+      "poo-chat-fechar"
+    );
 
   // ------------------------------------------------------------
   // ADICIONAR MENSAGEM NA TELA
@@ -391,20 +440,29 @@
     tipo,
     mostrarBotaoCopiar = false
   ) {
-    const mensagem = document.createElement("div");
+    const mensagem =
+      document.createElement("div");
 
     mensagem.className =
       "poo-chat-mensagem " +
-      (tipo === "usuario"
-        ? "poo-chat-usuario"
-        : "poo-chat-assistente");
+      (
+        tipo === "usuario"
+          ? "poo-chat-usuario"
+          : "poo-chat-assistente"
+      );
 
     const textoElemento =
       document.createElement("div");
 
     textoElemento.textContent = texto;
 
-    mensagem.appendChild(textoElemento);
+    mensagem.appendChild(
+      textoElemento
+    );
+
+    // ----------------------------------------------------------
+    // BOTÃO COPIAR
+    // ----------------------------------------------------------
 
     if (
       mostrarBotaoCopiar &&
@@ -416,7 +474,10 @@
       botaoCopiar.className =
         "poo-chat-copiar";
 
-      botaoCopiar.textContent = "Copiar";
+      botaoCopiar.type = "button";
+
+      botaoCopiar.textContent =
+        "Copiar";
 
       botaoCopiar.addEventListener(
         "click",
@@ -433,21 +494,34 @@
               botaoCopiar.textContent =
                 "Copiar";
             }, 1200);
+
           } catch (erro) {
-            // Fallback para navegadores que não
-            // permitem clipboard diretamente.
+            // Fallback para navegadores
+            // que não permitem Clipboard API.
 
             const area =
-              document.createElement("textarea");
+              document.createElement(
+                "textarea"
+              );
 
             area.value = texto;
 
-            document.body.appendChild(area);
+            area.style.position =
+              "fixed";
+
+            area.style.left =
+              "-9999px";
+
+            document.body.appendChild(
+              area
+            );
 
             area.select();
 
             try {
-              document.execCommand("copy");
+              document.execCommand(
+                "copy"
+              );
 
               botaoCopiar.textContent =
                 "Copiado!";
@@ -456,6 +530,7 @@
                 botaoCopiar.textContent =
                   "Copiar";
               }, 1200);
+
             } catch (erroCopia) {
               botaoCopiar.textContent =
                 "Erro ao copiar";
@@ -471,10 +546,14 @@
         }
       );
 
-      mensagem.appendChild(botaoCopiar);
+      mensagem.appendChild(
+        botaoCopiar
+      );
     }
 
-    mensagens.appendChild(mensagem);
+    mensagens.appendChild(
+      mensagem
+    );
 
     mensagens.scrollTop =
       mensagens.scrollHeight;
@@ -502,23 +581,31 @@
   // ABRIR / FECHAR
   // ------------------------------------------------------------
 
-  botao.addEventListener("click", (evento) => {
-    evento.stopPropagation();
+  botao.addEventListener(
+    "click",
+    (evento) => {
+      evento.stopPropagation();
 
-    if (painel.style.display === "flex") {
-      painel.style.display = "none";
-    } else {
-      painel.style.display = "flex";
+      if (
+        painel.style.display === "flex"
+      ) {
+        painel.style.display = "none";
+      } else {
+        painel.style.display = "flex";
 
-      setTimeout(() => {
-        input.focus();
-      }, 50);
+        setTimeout(() => {
+          input.focus();
+        }, 50);
+      }
     }
-  });
+  );
 
-  fechar.addEventListener("click", () => {
-    painel.style.display = "none";
-  });
+  fechar.addEventListener(
+    "click",
+    () => {
+      painel.style.display = "none";
+    }
+  );
 
   // ------------------------------------------------------------
   // FECHAR CLICANDO EM QUALQUER LUGAR FORA
@@ -527,7 +614,9 @@
   document.addEventListener(
     "pointerdown",
     (evento) => {
-      if (painel.style.display !== "flex") {
+      if (
+        painel.style.display !== "flex"
+      ) {
         return;
       }
 
@@ -559,7 +648,10 @@
       return;
     }
 
-    if (pergunta.length > MAX_CARACTERES) {
+    if (
+      pergunta.length >
+      MAX_CARACTERES
+    ) {
       alert(
         "A pergunta é muito grande."
       );
@@ -567,7 +659,6 @@
       return;
     }
 
-    // Limpa o campo imediatamente.
     input.value = "";
 
     // Mostra a pergunta.
@@ -584,8 +675,11 @@
 
     salvarHistorico();
 
-    // Desativa botão enquanto espera.
     enviar.disabled = true;
+
+    // ----------------------------------------------------------
+    // MENSAGEM DE CARREGAMENTO
+    // ----------------------------------------------------------
 
     const carregando =
       document.createElement("div");
@@ -596,26 +690,35 @@
     carregando.textContent =
       "Pensando...";
 
-    mensagens.appendChild(carregando);
+    mensagens.appendChild(
+      carregando
+    );
 
     mensagens.scrollTop =
       mensagens.scrollHeight;
 
+    // ----------------------------------------------------------
+    // REQUISIÇÃO AO WORKER
+    // ----------------------------------------------------------
+
     try {
       const resposta =
-        await fetch(WORKER_URL, {
-          method: "POST",
+        await fetch(
+          WORKER_URL,
+          {
+            method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
 
-          body: JSON.stringify({
-            pergunta: pergunta,
-            historico: historico
-          })
-        });
+            body: JSON.stringify({
+              pergunta: pergunta,
+              historico: historico
+            })
+          }
+        );
 
       if (!resposta.ok) {
         throw new Error(
@@ -635,12 +738,14 @@
         dados.message ||
         "Não foi possível obter uma resposta.";
 
+      // Mostra resposta.
       adicionarMensagem(
         textoResposta,
         "assistente",
         true
       );
 
+      // Salva resposta.
       historico.push({
         tipo: "assistente",
         texto: textoResposta
@@ -680,7 +785,7 @@
   }
 
   // ------------------------------------------------------------
-  // EVENTOS DE ENVIO
+  // EVENTO DO BOTÃO ENVIAR
   // ------------------------------------------------------------
 
   enviar.addEventListener(
@@ -688,12 +793,14 @@
     enviarPergunta
   );
 
+  // ------------------------------------------------------------
+  // ENTER ENVIA
+  // SHIFT + ENTER FAZ NOVA LINHA
+  // ------------------------------------------------------------
+
   input.addEventListener(
     "keydown",
     (evento) => {
-      // Enter envia.
-      // Shift + Enter cria uma nova linha.
-
       if (
         evento.key === "Enter" &&
         !evento.shiftKey
